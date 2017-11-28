@@ -9,6 +9,10 @@ import (
 	"flag"
 )
 
+const (
+	progVersion = "v0.1.0"
+)
+
 func prettyJson(src []byte) string {
 	buf := make([]byte, 0)
 	dst := bytes.NewBuffer(buf)
@@ -24,11 +28,18 @@ func main() {
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr,
 `Usage:
-  %s <file.json>
+  %s [options] <file.json>
+Options:
 `, os.Args[0])
 		flag.PrintDefaults()
 	}
+	opt_version := flag.Bool("version", false, "Show version.")
 	flag.Parse()
+
+	if *opt_version {
+		fmt.Println(progVersion)
+		os.Exit(0)
+	}
 
 	infile := flag.Args()[0]
 	src, err := ioutil.ReadFile(infile)
