@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"os"
 	"io/ioutil"
+	"flag"
 )
 
 func prettyJson(src []byte) string {
@@ -20,7 +21,16 @@ func prettyJson(src []byte) string {
 }
 
 func main() {
-	infile := os.Args[1]
+	flag.Usage = func() {
+		fmt.Fprintf(os.Stderr,
+`Usage:
+  %s <file.json>
+`, os.Args[0])
+		flag.PrintDefaults()
+	}
+	flag.Parse()
+
+	infile := flag.Args()[0]
 	src, err := ioutil.ReadFile(infile)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
